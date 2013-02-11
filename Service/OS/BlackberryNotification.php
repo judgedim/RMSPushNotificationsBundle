@@ -33,6 +33,11 @@ class BlackberryNotification implements OSNotificationServiceInterface
     protected $password;
 
     /**
+     * @var \Buzz\Message\Response
+     */
+    protected $response;
+
+    /**
      * Constructor
      *
      * @param $evaluation
@@ -85,8 +90,8 @@ class BlackberryNotification implements OSNotificationServiceInterface
         $headers[] = "Accept: text/html, *";
         $headers[] = "Connection: Keep-Alive";
 
-        $response = $browser->post($url, $headers, $body);
-        return $this->parseResponse($response);
+        $this->response = $browser->post($url, $headers, $body);
+        return $this->parseResponse($this->response);
     }
 
     /**
@@ -174,5 +179,15 @@ class BlackberryNotification implements OSNotificationServiceInterface
         $pap->appendChild($pm);
         $doc->appendChild($pap);
         return $doc->saveXML();
+    }
+
+    /**
+     * Returns responses
+     *
+     * @return array
+     */
+    public function getResponses()
+    {
+        return array($this->response);
     }
 }

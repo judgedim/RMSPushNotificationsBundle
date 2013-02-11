@@ -32,6 +32,16 @@ class BlackberryMessage implements MessageInterface
     }
 
     /**
+     * Returns the string message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->data;
+    }
+
+    /**
      * Sets the data. For Blackberry, this is any data required
      *
      * @param array $data The custom data to send

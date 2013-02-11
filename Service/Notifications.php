@@ -3,6 +3,7 @@
 namespace RMS\PushNotificationsBundle\Service;
 
 use RMS\PushNotificationsBundle\Message\MessageInterface;
+use Psr\Log\LoggerInterface;
 
 class Notifications
 {
@@ -14,11 +15,18 @@ class Notifications
     protected $handlers = array();
 
     /**
+     * @var Monolog\Logger
+     */
+    protected $logger;
+
+    /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(Monolog\Logger $logger = null)
     {
+        $this->logger = $logger;
     }
+
 
     /**
      * Sends a message to a device, identified by
@@ -34,7 +42,20 @@ class Notifications
             throw new \RuntimeException("OS type {$message->getTargetOS()} not supported");
         }
 
-        return $this->handlers[$message->getTargetOS()]->send($message);
+        /** @var \RMS\PushNotificationsBundle\Service\OS\OSNotificationServiceInterface $handler */
+        $handler = $this->handlers[$message->getTargetOS()];
+
+        $result = $handler->send($message);
+
+        if ($this->logger) {
+            $this->logger->info($message->getMessage(), array(
+                'message_body' => $message->getMessageBody(),
+                'response' => serialize($handler->getResponses()),
+                'result' => $result
+            ));
+        }
+
+        return $result;
     }
 
     /**

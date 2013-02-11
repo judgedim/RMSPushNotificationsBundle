@@ -59,6 +59,11 @@ class iOSNotification implements OSNotificationServiceInterface
     protected $jsonUnescapedUnicode = FALSE;
 
     /**
+     * @var array
+     */
+    protected $responses = array();
+
+    /**
      * Constructor
      *
      * @param $sandbox
@@ -135,6 +140,8 @@ class iOSNotification implements OSNotificationServiceInterface
                 // Resend all messages that where send after the failed message
                 $this->sendMessages($result['identifier']+1, $apnURL);
             }
+
+            $this->responses[] = $result;
         }
     }
 
@@ -266,5 +273,15 @@ class iOSNotification implements OSNotificationServiceInterface
         $payload = chr(1) . pack("N", $messageId) . pack("N", 0) . pack("n", 32) . pack("H*", $token) . pack("n", strlen($jsonBody)) . $jsonBody;
 
         return $payload;
+    }
+
+    /**
+     * Returns responses
+     *
+     * @return array
+     */
+    public function getResponses()
+    {
+        return $this->responses;
     }
 }

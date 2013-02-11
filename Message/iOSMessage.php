@@ -53,6 +53,16 @@ class iOSMessage implements MessageInterface
     }
 
     /**
+     * Returns the string message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->apsBody["aps"]["alert"];
+    }
+
+    /**
      * Sets any custom data for the APS body
      *
      * @param array $data

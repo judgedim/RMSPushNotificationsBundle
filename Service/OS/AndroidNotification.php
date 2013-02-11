@@ -38,6 +38,9 @@ class AndroidNotification implements OSNotificationServiceInterface
      */
     protected $authToken;
 
+
+    protected $response;
+
     /**
      * Constructor
      *
@@ -73,8 +76,8 @@ class AndroidNotification implements OSNotificationServiceInterface
 
             $buzz = new Browser();
             $buzz->getClient()->setVerifyPeer(false);
-            $response = $buzz->post("https://android.apis.google.com/c2dm/send", $headers, http_build_query($data));
-            return preg_match("/^id=/", $response->getContent()) > 0;
+            $this->response = $buzz->post("https://android.apis.google.com/c2dm/send", $headers, http_build_query($data));
+            return preg_match("/^id=/", $this->response->getContent()) > 0;
         }
 
         return false;
@@ -106,5 +109,15 @@ class AndroidNotification implements OSNotificationServiceInterface
         preg_match("/Auth=([a-z0-9_\-]+)/i", $response->getContent(), $matches);
         $this->authToken = $matches[1];
         return true;
+    }
+
+    /**
+     * Returns responses
+     *
+     * @return array
+     */
+    public function getResponses()
+    {
+        return array($this->response);
     }
 }

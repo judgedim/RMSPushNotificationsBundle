@@ -14,6 +14,7 @@
 
         <!-- main notification service -->
         <service id="rms_push_notifications" class="%rms_push_notifications.class%">
+            <argument type="service" id="rms_push_notifications.logger"/>
         </service>
 
     </services>
