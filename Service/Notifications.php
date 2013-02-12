@@ -3,7 +3,7 @@
 namespace RMS\PushNotificationsBundle\Service;
 
 use RMS\PushNotificationsBundle\Message\MessageInterface;
-use Psr\Log\LoggerInterface;
+use Monolog\Logger;
 
 class Notifications
 {
@@ -15,14 +15,14 @@ class Notifications
     protected $handlers = array();
 
     /**
-     * @var Monolog\Logger
+     * @var Logger
      */
     protected $logger;
 
     /**
      * Constructor
      */
-    public function __construct(Monolog\Logger $logger = null)
+    public function __construct(Logger $logger = null)
     {
         $this->logger = $logger;
     }
