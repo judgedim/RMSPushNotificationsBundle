@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
                             canBeUnset()->
                             children()->
                                 scalarNode("api_key")->isRequired()->cannotBeEmpty()->end()->
+                                scalarNode("timeout")->defaultValue(5)->end()->
                             end()->
                         end()->
                     end()->
